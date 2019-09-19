@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DevExpress.Spreadsheet;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 
 namespace WorkbookTest.Controllers
 {
@@ -19,19 +20,34 @@ namespace WorkbookTest.Controllers
 
     private readonly IHostingEnvironment _env;
 
-    [HttpGet]
-    public int Get()
-    {
-      string path = Path.Combine(_env.ContentRootPath, "Data");
-      string filename = $"{path}/planilha.xlsx";
+		[HttpGet]
+		public int Get()
+		{
+			string path = Path.Combine(_env.ContentRootPath, "Data");
+			string filename = $"{path}/planilha.xlsx";
 
-      Workbook wb = new Workbook();
-      using (FileStream stream = new FileStream(filename, FileMode.Open))
-      {
-        wb.LoadDocument(stream, DocumentFormat.Xlsx);
-      }
+			Workbook wb = new Workbook();
+			using (FileStream stream = new FileStream(filename, FileMode.Open))
+			{
+				wb.LoadDocument(stream, DocumentFormat.Xlsx);
+			}
 
-      return wb.Worksheets.Count;
-    }
-  }
+			return wb.Worksheets.Count;
+		}
+
+		[HttpGet("EPPlus")]
+		public int Get1()
+		{
+			string path = Path.Combine(_env.ContentRootPath, "Data");
+			string filename = $"{path}/planilha.xlsx";
+
+			ExcelPackage wb = new ExcelPackage();
+			using (FileStream stream = new FileStream(filename, FileMode.Open))
+			{
+				wb.Load(stream);
+			}
+
+			return wb.Workbook.Worksheets.Count;
+		}
+	}
 }
