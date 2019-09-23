@@ -22,8 +22,8 @@ WORKDIR /app
 COPY --from=publish /app .
 COPY WorkbookTest/aspnetapp.pfx .
 
-# RUN apt-get update
+RUN apt-get update
 # RUN apt-get install -y --allow-unauthenticated libgdiplus
-# RUN apt-get install -y libgdiplus
+RUN apt-get install -y libc6-dev libgdiplus
 
 ENTRYPOINT ["dotnet", "WorkbookTest.dll"]

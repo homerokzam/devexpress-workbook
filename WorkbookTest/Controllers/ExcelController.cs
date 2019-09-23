@@ -26,14 +26,22 @@ namespace WorkbookTest.Controllers
 			string path = Path.Combine(_env.ContentRootPath, "Data");
 			string filename = $"{path}/planilha.xlsx";
 
-			Workbook wb = new Workbook();
-			using (FileStream stream = new FileStream(filename, FileMode.Open))
-			{
-				wb.LoadDocument(stream, DocumentFormat.Xlsx);
-			}
+      Workbook wb = new Workbook();
+      wb.Options.Import.ThrowExceptionOnInvalidDocument = true;
+      using (FileStream stream = new FileStream(filename, FileMode.Open))
+      {
+        wb.LoadDocument(stream, DocumentFormat.Xlsx);
+      }
 
-			return wb.Worksheets.Count;
-		}
+      return wb.Worksheets.Count;
+
+      //using (Workbook wb = new Workbook())
+      //{
+      //  wb.Options.Import.ThrowExceptionOnInvalidDocument = true;
+      //  wb.LoadDocument(filename, DocumentFormat.Xlsx);
+      //  return wb.Worksheets.Count;
+      //}
+    }
 
 		[HttpGet("EPPlus")]
 		public int Get1()
